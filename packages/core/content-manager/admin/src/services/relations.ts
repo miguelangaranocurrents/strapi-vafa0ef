@@ -122,10 +122,17 @@ const relationsApi = contentManagerApi.injectEndpoints({
       },
       serializeQueryArgs: (args) => {
         const { endpointName, queryArgs } = args;
+        /**
+         * The `id` identifies the source entry (document or component) whose existing relations
+         * are excluded from the results, so it must be part of the cache key. Otherwise two
+         * components sharing the same field (e.g. in a dynamic zone) would read each other's results.
+         */
         return {
           endpointName,
           model: queryArgs.model,
           targetField: queryArgs.targetField,
+          id: queryArgs.params?.id,
+          locale: queryArgs.params?.locale,
           _q: queryArgs.params?._q,
           idsToOmit: queryArgs.params?.idsToOmit,
           idsToInclude: queryArgs.params?.idsToInclude,

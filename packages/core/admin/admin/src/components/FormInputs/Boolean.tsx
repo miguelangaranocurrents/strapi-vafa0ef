@@ -20,7 +20,10 @@ const BooleanInput = forwardRef<HTMLInputElement, InputProps>(
       field.onChange(name, null);
     };
 
-    const showClearButton = !required && field.value !== null && !disabled;
+    // `undefined` means the attribute has no default and the entry has no value yet (e.g. a new entry),
+    // which must be treated the same as `null` so the Clear button stays hidden.
+    const hasValue = field.value !== null && field.value !== undefined;
+    const showClearButton = !required && hasValue && !disabled;
 
     return (
       <Field.Root error={field.error} name={name} hint={hint} required={required} maxWidth="320px">
